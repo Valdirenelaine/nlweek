@@ -5,7 +5,7 @@ const { subjects,  weekdays,  getSubject, convertHoursToMinutes}  = require ('./
   return res.render("index.html")
  }
 
- async function pageStudy (req,res){
+  const pageStudy= async (req,res)=> {
   const filters = req.query
   if(!filters.subject || !filters.weekday || !filters.time){
     return res.render("study.html",{filters,subjects , weekdays })
