@@ -37,20 +37,44 @@ const { subjects,  weekdays,  getSubject, convertHoursToMinutes}  = require ('./
 
 
 function pageGiveClasses(req,res){
-  const data = req.query
-  const isNotEmpty =Object.keys(data).length > 0
-
-  if(isNotEmpty){
-    data.subject = getSubject(data.subject)
-    proffys.push(data)
-    return res.redirect("/study")
-  }
-  else{
     return res.render("give-classes.html",{data, subjects , weekdays})
+  
+}
+
+const saveClasses= async (req,res)=> {
+  const createProffy= require('.database/createProffy')
+ const proffyValue = {
+      name: req.body.name,
+      avatar: req.body.avatar,
+      whatsapp: req.body.whatsapp,
+      bio: req.body.bio
+   }
+  const classValue ={
+    subject: req.body.subject,
+    cost: req.body.const
+
+  } 
+  const classScheduleValues = req.body.whatsapp.ma((weekday,index) =>{
+    return {
+      weekday,
+      time_from: convertHoursToMinutes(req.body.time_from[index]),
+      time_to: convertHoursToMinutes(req.body.time_to[index])
+    }
+  })
+  try {
+    const db= await(database)
+    await createProffy(db,{proffyValue,classValue,classScheduleValues})
+    let queryString="?subject="+req.body.subject
+    queryString += "&weekday="+req.body.whatsapp[0]
+    return res.redirect("/study")
+  } catch (error) {
+    console.log(error)
   }
+ 
 }
 module.exports = {
   pageLanding,
   pageStudy,
-  pageGiveClasses 
+  pageGiveClasses,
+  saveClasses 
 }
