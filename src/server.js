@@ -1,94 +1,11 @@
- const proffys=[
-   {
-     name:"Diego Fernandes", 
-     avatar:"https://avatars2.githubusercontent.com/u/2254731?s=460&amp;u=0ba16a79456c2f250e7579cb388fa18c5c2d7d65&amp;v=4",
-     whatsapp: "67981721509", 
-     bio:"Entusiasta das melhores tecnologias de química avançada.<br><br>Apaixonado por explodir coisas em laboratório e por mudar a vida das pessoas através de experiências. Mais de 200.000 pessoas já passaram por uma das minhas explosões.",
-     subject:"Química", 
-     cost: "20", 
-     weekday:[0] , 
-     time_from: [720] , 
-     time_to: [1220]
-     
-   },
-   {
-     name:"Valdirene Elaine", 
-     avatar:"https://avatars0.githubusercontent.com/u/63911504?s=460&u=9663e0f235e6aecf9f4ee5a4413287d600a31a77&v=4",
-     whatsapp: "67981721509", 
-     bio:"Entusiasta das melhores tecnologias de química avançada.<br><br>Apaixonado por explodir coisas em laboratório e por mudar a vida das pessoas através de experiências. Mais de 200.000 pessoas já passaram por uma das minhas explosões.",
-     subject:"Português", 
-     cost: "30", 
-     weekday:[1] , 
-     time_from: [720] , 
-     time_to: [1220]
-     
-   },
-   {
-     name:"Valdemir Carlos", 
-     avatar:"https://www.facebook.com/search/async/profile_picture/?fbid=100002248086433&width=72&height=72",
-     whatsapp: "67981622700", 
-     bio:"Entusiasta das melhores tecnologias de química avançada.<br><br>Apaixonado por explodir coisas em laboratório e por mudar a vida das pessoas através de experiências. Mais de 200.000 pessoas já passaram por uma das minhas explosões.",
-     subject:"Português", 
-     cost: "30", 
-     weekday:[1] , 
-     time_from: [720] , 
-     time_to: [1220]
-     
-   }
- ]
- const subjects =[
-  "Artes",
-  "Biologia",
-  "Ciências",
-  "Educação física",
-  "Física",
-  "Geografia",
-  "História",
-  "Matemática",
-  "Português",
-  "Química",
- ]
- const weekdays=[
-  "Domingo",
-  "Segunda-feira",
-  "Terça-feira",
-  "Quarta-feira",
-  "Quinta-feira",
-  "Sexta-feira",
-  "Sábado",
- ]
-
- function getSubject(subjectNumber){
-   const position = +subjectNumber -1
-   return subjects[position]
-   
- }
- function pageLanding(reg,res){
-  return res.render("index.html")
- }
-
- function pageStudy(req,res){
-  const filters = req.query
-  return res.render("study.html",{ proffys, filters,subjects , weekdays })
-}
-
-function pageGiveClasses(req,res){
-  const data = req.query
-  const isNotEmpty =Object.keys(data).length > 0
-
-  if(isNotEmpty){
-    data.subject = getSubject(data.subject)
-    proffys.push(data)
-    return res.redirect("/study",)
-  }
-  else{
-    return res.render("give-classes.html",{data, subjects , weekdays})
-  }
-}
 
  const express = require('express')
  const server = express()
-
+ const {
+  pageLanding,
+  pageStudy,
+  pageGiveClasses
+ } = require('./pages')
  //configurar o nunjucks
  const nunjucks = require('nunjucks')
  nunjucks.configure('src/views',{

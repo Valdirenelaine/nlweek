@@ -10,7 +10,7 @@ Database.then(async (db)=>{
 
 }
  classValue ={
-  subject:"Química", 
+  subject: 1, 
   cost: "20" 
  }
  classScheduleValues=[
@@ -25,6 +25,23 @@ Database.then(async (db)=>{
      time_to: 1220
     }
     ]
-    await createProffy(db,{proffyValue,classValue,classScheduleValues})
+    //  await createProffy(db,{proffyValue,classValue,classScheduleValues})
+ const selectedProffys = await db.all("select * from proffys")
+ console.log(selectedProffys)
+
+ const selectCassesAndProffys = await db.all(`
+    select * from proffys p join classes c ON (p.id =c.proffy_id )
+    where p.id = 1
+ `)
+ console.log(selectCassesAndProffys)
+
+ const selectClassesSchedules = await db.all(`
+    select * 
+    from class_schedule 
+    where  class_id = "1" and weekday = "0"
+          and time_from <="620"
+          and time_to >="430"
+ `)
+ console.log(selectClassesSchedules)
   }
 )
