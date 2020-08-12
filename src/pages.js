@@ -5,10 +5,10 @@ const { subjects,  weekdays,  getSubject, convertHoursToMinutes}  = require ('./
   return res.render("index.html")
  }
 
- function pageStudy(req,res){
+ async function pageStudy (req,res){
   const filters = req.query
   if(!filters.subject || !filters.weekday || !filters.time){
-    return res.render("study.html",{ proffys, filters,subjects , weekdays })
+    return res.render("study.html",{filters,subjects , weekdays })
   }
 
   const timeToMinutes = convertHoursToMinutes(filters.time)
@@ -19,7 +19,7 @@ const { subjects,  weekdays,  getSubject, convertHoursToMinutes}  = require ('./
    where exists(
       select * 
       from class_schedule s
-      where s.id = c.class_id
+      where s.id = c.id
       and  s.weekday = ${filters.weekday}
       and s.time_from <= ${timeToMinutes}
       and s.time_to >= ${timeToMinutes}
@@ -27,11 +27,11 @@ const { subjects,  weekdays,  getSubject, convertHoursToMinutes}  = require ('./
   `
   try {
      const db = await Database
-     const proffys = await db.all(quety)
+     const proffys = await db.all(query)
       return res.render("study.html",{ proffys, filters,subjects , weekdays })
     
   } catch (error) {
-    console(error)
+    console.log(error)
   }
 }
 
