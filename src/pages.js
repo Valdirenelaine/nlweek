@@ -19,15 +19,18 @@ const { subjects,  weekdays,  getSubject, convertHoursToMinutes}  = require ('./
    where exists(
       select * 
       from class_schedule s
-      where s.id = c.id
-      and  s.weekday = ${filters.weekday}
+      where s.class_id = c.id
+      and s.weekday = ${filters.weekday}
       and s.time_from <= ${timeToMinutes}
-      and s.time_to >= ${timeToMinutes}
+      and s.time_to > ${timeToMinutes}
    ) and c.subject = "${filters.subject}"
   `
   try {
      const db = await Database
      const proffys = await db.all(query)
+       proffys.map((proffy)=>{
+        proffy.subject = getSubject(proffy.subject)
+       })
       return res.render("study.html",{ proffys, filters,subjects , weekdays })
     
   } catch (error) {
