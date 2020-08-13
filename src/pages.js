@@ -42,7 +42,7 @@ function pageGiveClasses(req,res){
 }
 
 const saveClasses= async (req,res)=> {
-  const createProffy= require('.database/createProffy')
+  const createProffy= require('./database/createProffy')
  const proffyValue = {
       name: req.body.name,
       avatar: req.body.avatar,
@@ -54,7 +54,7 @@ const saveClasses= async (req,res)=> {
     cost: req.body.const
 
   } 
-  const classScheduleValues = req.body.whatsapp.ma((weekday,index) =>{
+  const classScheduleValues = req.body.weekday.map((weekday,index) =>{
     return {
       weekday,
       time_from: convertHoursToMinutes(req.body.time_from[index]),
@@ -62,7 +62,7 @@ const saveClasses= async (req,res)=> {
     }
   })
   try {
-    const db= await(database)
+    const db= await(Database)
     await createProffy(db,{proffyValue,classValue,classScheduleValues})
     let queryString="?subject="+req.body.subject
     queryString += "&weekday="+req.body.weekday[0]
