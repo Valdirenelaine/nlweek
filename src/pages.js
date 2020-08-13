@@ -37,7 +37,7 @@ const { subjects,  weekdays,  getSubject, convertHoursToMinutes}  = require ('./
 
 
 function pageGiveClasses(req,res){
-    return res.render("give-classes.html",{data, subjects , weekdays})
+    return res.render("give-classes.html",{subjects , weekdays})
   
 }
 
@@ -65,8 +65,9 @@ const saveClasses= async (req,res)=> {
     const db= await(database)
     await createProffy(db,{proffyValue,classValue,classScheduleValues})
     let queryString="?subject="+req.body.subject
-    queryString += "&weekday="+req.body.whatsapp[0]
-    return res.redirect("/study")
+    queryString += "&weekday="+req.body.weekday[0]
+    queryString += "&time="+req.body.time_from[0]
+    return res.redirect("/study"+queryString)
   } catch (error) {
     console.log(error)
   }
